@@ -1,23 +1,24 @@
-%define gitrepo http://github.com/philfry/%{name}.git
-%define gitrev v%{version}
-
-%if 0%{?el7}%{?fedora}
-%global dracut %{_usr}/lib/dracut
-%endif
-
-%if 0%{?el6}
-%global dracut %{_datadir}/dracut
-%endif
+%define dracutlibdir %{_prefix}/lib/dracut
 
 Name: dracut-earlyssh
 Version: 1.0.2
-Release: 6%{?dist}
+Release: 7%{?dist}
+
 Summary: A dracut module that adds ssh to the boot image (also known as earlyssh)
+%if 0%{?fedora} || 0%{?rhel}
 Group: System Environment/Base
+%endif
+%if 0%{?suse_version}
+Group: System/Base
+%endif
+
+# FIXME: "DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE"
 License: GPLv2+
+# FIXME: project page
 URL: https://github.com/philfry/%{name}
 Source0: %{name}-%{version}.tar.gz
-BuildRoot: %(mktemp -ud %{_tmppath}/%{name}-%{version}-%{release}-XXXXXX)
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
+
 BuildRequires: dracut libblkid-devel gcc
 Requires: dropbear dracut dracut-network openssh
 
@@ -43,21 +44,24 @@ Please read the README and configuration parameters in
 
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{version}
 
 
 %build
-./configure
+%configure
+
 make %{?_smp_mflags}
 
 
 %install
-[ '%{buildroot}' != '/' ] && rm -rf %{buildroot}
-make install DESTDIR=%{buildroot}
+%if 0%{?fedora} || 0%{?rhel}
+rm -rf -- $RPM_BUILD_ROOT
+%endif
 
+make %{?_smp_mflags} install DESTDIR=$RPM_BUILD_ROOT
 
 %clean
-[ '%{buildroot}' != '/' ] && rm -rf %{buildroot}
+rm -rf -- $RPM_BUILD_ROOT
 
 
 %files
@@ -67,17 +71,24 @@ make install DESTDIR=%{buildroot}
 %dir %{_libexecdir}/dracut-earlyssh
 %{_libexecdir}/dracut-earlyssh/unlock
 %{_libexecdir}/dracut-earlyssh/console_auth
-%dir %{dracut}/modules.d/60earlyssh
-%{dracut}/modules.d/60earlyssh/module-setup.sh
-%{dracut}/modules.d/60earlyssh/console_peek.sh
-%{dracut}/modules.d/60earlyssh/unlock-reap-success.sh
-%{dracut}/modules.d/60earlyssh/50-udev-pty.rules
+%dir %{dracutlibdir}/modules.d/60earlyssh
+%{dracutlibdir}/modules.d/60earlyssh/module-setup.sh
+%{dracutlibdir}/modules.d/60earlyssh/console_peek.sh
+%{dracutlibdir}/modules.d/60earlyssh/unlock-reap-success.sh
+%{dracutlibdir}/modules.d/60earlyssh/50-udev-pty.rules
 %if 0%{?el6}
-%{dracut}/modules.d/60earlyssh/dummyroot
-%{dracut}/modules.d/60earlyssh/check
-%{dracut}/modules.d/60earlyssh/install
-%dir %{dracut}/modules.d/91cryptsettle-patch
-%{dracut}/modules.d/91cryptsettle-patch/check
-%{dracut}/modules.d/91cryptsettle-patch/install
-%{dracut}/modules.d/91cryptsettle-patch/module-setup.sh
+# %{dracutlibdir}/modules.d/60earlyssh/dummyroot
+# %{dracutlibdir}/modules.d/60earlyssh/check
+# %{dracutlibdir}/modules.d/60earlyssh/install
+# %dir %{dracutlibdir}/modules.d/91cryptsettle-patch
+# %{dracutlibdir}/modules.d/91cryptsettle-patch/check
+# %{dracutlibdir}/modules.d/91cryptsettle-patch/install
+# %{dracutlibdir}/modules.d/91cryptsettle-patch/module-setup.sh
 %endif
+
+%changelog
+* Sat Feb 27 2016 Robert Buchholz <rbu@fedoraproject.org> - 1.0.2-7
+- Clean up, use variables consistent with dracut spec
+- Initial changelog entry, spec file based on Philippe Kueck and
+  Michael Curtis, licensed under the "DO WHAT THE FUCK YOU WANT TO
+  PUBLIC LICENSE"
