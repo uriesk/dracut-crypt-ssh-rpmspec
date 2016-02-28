@@ -1,6 +1,6 @@
 %define dracutlibdir %{_prefix}/lib/dracut
 
-Name: dracut-earlyssh
+Name: dracut-crypt-ssh
 Version: 1.0.2
 Release: 7%{?dist}
 
@@ -19,8 +19,13 @@ URL: https://github.com/philfry/%{name}
 Source0: %{name}-%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
-BuildRequires: dracut libblkid-devel gcc
-Requires: dropbear dracut dracut-network openssh
+BuildRequires: dracut
+BuildRequires: gcc
+BuildRequires: libblkid-devel
+Requires: dropbear
+Requires: dracut
+Requires: dracut-network
+Requires: openssh
 
 
 %description
@@ -40,7 +45,7 @@ See dropbear(8) manpage for full list of supported restrictions there
 (which are fairly similar to openssh).
 
 Please read the README and configuration parameters in 
-/etc/dracut.conf.d/earlyssh.conf before use.
+/etc/dracut.conf.d/crypt-ssh.conf before use.
 
 
 %prep
@@ -67,27 +72,21 @@ rm -rf -- $RPM_BUILD_ROOT
 %files
 %defattr(-,root,root,-)
 %doc README.md COPYING
-%config(noreplace) %{_sysconfdir}/dracut.conf.d/earlyssh.conf
-%dir %{_libexecdir}/dracut-earlyssh
-%{_libexecdir}/dracut-earlyssh/unlock
-%{_libexecdir}/dracut-earlyssh/console_auth
-%dir %{dracutlibdir}/modules.d/60earlyssh
-%{dracutlibdir}/modules.d/60earlyssh/module-setup.sh
-%{dracutlibdir}/modules.d/60earlyssh/console_peek.sh
-%{dracutlibdir}/modules.d/60earlyssh/unlock-reap-success.sh
-%{dracutlibdir}/modules.d/60earlyssh/50-udev-pty.rules
-%if 0%{?el6}
-# %{dracutlibdir}/modules.d/60earlyssh/dummyroot
-# %{dracutlibdir}/modules.d/60earlyssh/check
-# %{dracutlibdir}/modules.d/60earlyssh/install
-# %dir %{dracutlibdir}/modules.d/91cryptsettle-patch
-# %{dracutlibdir}/modules.d/91cryptsettle-patch/check
-# %{dracutlibdir}/modules.d/91cryptsettle-patch/install
-# %{dracutlibdir}/modules.d/91cryptsettle-patch/module-setup.sh
-%endif
+%config(noreplace) %{_sysconfdir}/dracut.conf.d/crypt-ssh.conf
+%dir %{dracutlibdir}/modules.d/60crypt-ssh
+%dir %{dracutlibdir}/modules.d/60crypt-ssh/helper
+%{dracutlibdir}/modules.d/60crypt-ssh/module-setup.sh
+%{dracutlibdir}/modules.d/60crypt-ssh/dropbear-start.sh
+%{dracutlibdir}/modules.d/60crypt-ssh/dropbear-stop.sh
+%{dracutlibdir}/modules.d/60crypt-ssh/50-udev-pty.rules
+%{dracutlibdir}/modules.d/60crypt-ssh/helper/console_peek.sh
+%{dracutlibdir}/modules.d/60crypt-ssh/helper/unlock
+%{dracutlibdir}/modules.d/60crypt-ssh/helper/console_auth
+%{dracutlibdir}/modules.d/60crypt-ssh/helper/unlock-reap-success.sh
 
 %changelog
 * Sat Feb 27 2016 Robert Buchholz <rbu@fedoraproject.org> - 1.0.2-7
+- Rename project to crypt-ssh
 - Clean up, use variables consistent with dracut spec
 - Initial changelog entry, spec file based on Philippe Kueck and
   Michael Curtis, licensed under the "DO WHAT THE FUCK YOU WANT TO
