@@ -1,8 +1,8 @@
 %define dracutlibdir %{_prefix}/lib/dracut
 
 Name: dracut-crypt-ssh
-Version: 1.0.2
-Release: 7%{?dist}
+Version: 1.0.3
+Release: 1%{?dist}
 
 Summary: A dracut module that adds ssh to the boot image (also known as earlyssh)
 %if 0%{?fedora} || 0%{?rhel}
@@ -12,11 +12,9 @@ Group: System Environment/Base
 Group: System/Base
 %endif
 
-# FIXME: "DO WHAT THE FUCK YOU WANT TO PUBLIC LICENSE"
 License: GPLv2+
-# FIXME: project page
-URL: https://github.com/philfry/%{name}
-Source0: %{name}-%{version}.tar.gz
+URL: https://github.com/dracut-crypt-ssh/dracut-crypt-ssh
+Source0: https://github.com/dracut-crypt-ssh/%{name}/archive/v%{version}.tar.gz
 BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 
 BuildRequires: dracut
@@ -71,7 +69,8 @@ rm -rf -- $RPM_BUILD_ROOT
 
 %files
 %defattr(-,root,root,-)
-%doc README.md COPYING
+%doc README.md
+%license COPYING COPYRIGHT
 %config(noreplace) %{_sysconfdir}/dracut.conf.d/crypt-ssh.conf
 %dir %{dracutlibdir}/modules.d/60crypt-ssh
 %dir %{dracutlibdir}/modules.d/60crypt-ssh/helper
@@ -85,6 +84,9 @@ rm -rf -- $RPM_BUILD_ROOT
 %{dracutlibdir}/modules.d/60crypt-ssh/helper/unlock-reap-success.sh
 
 %changelog
+* Sun Mar 06 2016 Robert Buchholz <rbu@fedoraproject.org> - 1.0.3-1
+- Upgrade to 1.0.3
+
 * Sat Feb 27 2016 Robert Buchholz <rbu@fedoraproject.org> - 1.0.2-7
 - Rename project to crypt-ssh
 - Clean up, use variables consistent with dracut spec
