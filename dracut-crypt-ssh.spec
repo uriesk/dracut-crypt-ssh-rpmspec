@@ -1,7 +1,7 @@
 %define dracutlibdir %{_prefix}/lib/dracut
 
 Name: dracut-crypt-ssh
-Version: 1.0.5
+Version: 1.0.6
 Release: 1%{?dist}
 
 Summary: A dracut module that adds ssh to the boot image (also known as earlyssh)
@@ -84,6 +84,9 @@ rm -rf -- $RPM_BUILD_ROOT
 %{dracutlibdir}/modules.d/60crypt-ssh/helper/unlock-reap-success.sh
 
 %changelog
+* Thu Mar 08 2018 rbu <rbu@goodpoint.de> - 1.0.6-1
+- Update to 1.0.6
+
 * Thu Mar 08 2018 rbu <rbu@goodpoint.de> - 1.0.5-1
 - Update to 1.0.5
 
