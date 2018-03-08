@@ -1,8 +1,8 @@
 %define dracutlibdir %{_prefix}/lib/dracut
 
 Name: dracut-crypt-ssh
-Version: 1.0.3
-Release: 1%{?dist}
+Version: 1.0.4
+Release: 2%{?dist}
 
 Summary: A dracut module that adds ssh to the boot image (also known as earlyssh)
 %if 0%{?fedora} || 0%{?rhel}
@@ -42,7 +42,7 @@ option) file.
 See dropbear(8) manpage for full list of supported restrictions there
 (which are fairly similar to openssh).
 
-Please read the README and configuration parameters in 
+Please read the README and configuration parameters in
 /etc/dracut.conf.d/crypt-ssh.conf before use.
 
 
@@ -84,6 +84,9 @@ rm -rf -- $RPM_BUILD_ROOT
 %{dracutlibdir}/modules.d/60crypt-ssh/helper/unlock-reap-success.sh
 
 %changelog
+* Thu Mar 08 2018 rbu <rbu@goodpoint.de> - 1.0.4-2
+- Update to 1.0.4
+
 * Sun Mar 06 2016 Robert Buchholz <rbu@fedoraproject.org> - 1.0.3-1
 - Upgrade to 1.0.3
 
