@@ -1,12 +1,12 @@
 %define dracutlibdir %{_prefix}/lib/dracut
 %global forgeurl https://github.com/dracut-crypt-ssh/dracut-crypt-ssh
-%global commit 43b24713f247ad252390ff357383cac60ba0802e
+%global commit f8127c19dc935bd6c607e123e219bd2fc8a35e50
 
 %forgemeta
 
 Name: dracut-crypt-ssh
 Version: 1.0.7
-Release: 2%{?dist}
+Release: 3%{?dist}
 Summary: A dracut module that adds ssh to the boot image (also known as earlyssh)
 URL: %{forgeurl}
 Source0: %{forgesource}
@@ -88,6 +88,9 @@ rm -rf -- $RPM_BUILD_ROOT
 %{dracutlibdir}/modules.d/60crypt-ssh/helper/unlock-reap-success.sh
 
 %changelog
+* Mon May 15 2023 uriesk <uriesk@posteo.de> - 1.0.7-3
+- Build from commit f8127c
+
 * Mon May 15 2023 uriesk <uriesk@posteo.de> - 1.0.7-2
 - Build from git repo since we didn't get new Tags provided
 
