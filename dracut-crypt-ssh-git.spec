@@ -1,12 +1,12 @@
 %define dracutlibdir %{_prefix}/lib/dracut
 %global forgeurl https://github.com/dracut-crypt-ssh/dracut-crypt-ssh
-%global commit f8127c19dc935bd6c607e123e219bd2fc8a35e50
+%global commit 17b567750fd28e50f22dec999acf4f8d3688d5bf
 
 %forgemeta
 
 Name: dracut-crypt-ssh
 Version: 1.0.7
-Release: 3%{?dist}
+Release: 4%{?dist}
 Summary: A dracut module that adds ssh to the boot image (also known as earlyssh)
 URL: %{forgeurl}
 Source0: %{forgesource}
