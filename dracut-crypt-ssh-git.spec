@@ -1,15 +1,12 @@
 %define dracutlibdir %{_prefix}/lib/dracut
-%global forgeurl https://github.com/dracut-crypt-ssh/dracut-crypt-ssh
 %global commit de3c2b9ffceae77f04b3aa2c05cf0f377f0c39a8
-
-%forgemeta
 
 Name: dracut-crypt-ssh
 Version: 1.0.8
-Release: 1%{?dist}
+Release: 2%{?dist}
 Summary: A dracut module that adds ssh to the boot image (also known as earlyssh)
-URL: %{forgeurl}
-Source0: %{forgesource}
+URL:     https://github.com/dracut-crypt-ssh/%{name}
+Source0: https://github.com/dracut-crypt-ssh/%{name}/archive/%{commit}.zip
 
 %if 0%{?fedora} || 0%{?rhel}
 Group: System Environment/Base
@@ -51,7 +48,7 @@ Please read the README and configuration parameters in
 
 
 %prep
-%forgesetup
+%autosetup -p1 -n %{name}-%{commit}
 
 
 %build
@@ -88,6 +85,9 @@ rm -rf -- $RPM_BUILD_ROOT
 %{dracutlibdir}/modules.d/60crypt-ssh/helper/unlock-reap-success.sh
 
 %changelog
+* Sat Oct 20 2023 uriesk <uriesk@posteo.de> - 1.0.8-2
+- Update to current commit, stop using forge macro
+
 * Mon May 15 2023 uriesk <uriesk@posteo.de> - 1.0.7-3
 - Build from commit f8127c
 
